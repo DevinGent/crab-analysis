@@ -64,3 +64,54 @@ print(linreg.score(X_test, y_test))
 print(linreg)
 print(linreg.coef_)
 print(linreg.intercept_)
+
+# Let use try using multiple regression now, using weight, shell weight, and viscera weight 
+# to predict shucked weight and compare to the simple linear model
+multireg = LinearRegression()
+multireg.fit(train_df[['Weight', 'Viscera Weight', 'Shell Weight']].to_numpy(), train_df['Shucked Weight'])
+# The .to_numpy() is only required to stop a warning later on (when predicting) about the regression being fitted with labels. 
+# We could also just feed the predict a dataframe with the right labels.  I'll leave an example below.
+
+print("The score for the multiple regression model is",
+      multireg.score(test_df[['Weight', 'Viscera Weight', 'Shell Weight']], test_df['Shucked Weight']))
+
+################################################################################
+# Let us use these models to try and predict shell weight against a few examples from the test set.
+print(test_df)
+# Here are a few of the entries: 
+# (the columns are index, weight, shucked weight, viscera weight, shell weight)
+""""
+1413  35.507749       16.584457        7.356695      9.355335
+2785  30.518237       13.919605        6.236890      8.136306
+2905  35.507749       20.695135       11.268926     13.097469
+"""
+# We will round these out and use the predict method of each linear model.  We will test the following:
+"""
+36      ??      7       9
+31      ??      6       8
+36      ??      11      13      
+"""
+# First let's use the linear model.
+print("The linear model predicts that a crab with weight 36 has shucked weight",linreg.predict(np.array([36]).reshape(-1,1)))
+print("The linear model predicts that a crab with weight 31 has shucked weight",linreg.predict(np.array([31]).reshape(-1,1)))
+# Let's also try with 35.5
+print("The linear model predicts that a crab with weight 31.5 has shucked weight",linreg.predict([[31.5]]))
+# Notice that the double brackets works, and we need not reshape the single entry.
+print("The numpy model predicts that a crab with weight 36 has shucked weight",lin_fit(36))
+print("The numpy model predicts that a crab with weight 31 has shucked weight",lin_fit(31))
+print("The numpy model predicts that a crab with weight 31.5 has shucked weight",lin_fit(31.5))
+
+print("The multiple regression model predicts that a crab with")
+print("weight {}, viscera weight {}, and shell weight {} has shucked weight {}.".format(36,7,9, multireg.predict([[36,7,9]])))
+print("The multiple regression model predicts that a crab with")
+print("weight {}, viscera weight {}, and shell weight {} has shucked weight {}.".format(31,6,8, multireg.predict([[31,6,8]])))
+print("The multiple regression model predicts that a crab with")
+print("weight {}, viscera weight {}, and shell weight {} has shucked weight {}.".format(36,11,13, multireg.predict([[36,11,13]])))
+
+# Testing predictions when features have labels:
+multireg.fit(train_df[['Weight', 'Viscera Weight', 'Shell Weight']], train_df['Shucked Weight'])
+predictdf=pd.DataFrame([[36,7,9],[31,6,8],[36,11,13]])
+print(predictdf)
+predictdf.columns=["Weight", "Viscera Weight", "Shell Weight"]
+print(predictdf)
+print(multireg.predict(predictdf))
