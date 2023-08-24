@@ -83,4 +83,43 @@ plt.show()
 # this tree predicts male far more often than female.
 
 # Accuracy will be between 0 and 1, with 1 being complete accuracy.
-print("The accuracy of this model on the test data is",metrics.accuracy_score(y_test, predicted))
+sm_model_accuracy=metrics.accuracy_score(y_test, predicted)
+print("The accuracy of this model on the test data is",sm_model_accuracy)
+
+# Let us try using a larger decision tree where we do not cap the depth.  This time we will not display the tree.
+big_dtree = tree.DecisionTreeClassifier()
+big_dtree = big_dtree.fit(X_train.values, y_train)
+
+predicted=big_dtree.predict(X_test.values)
+big_model_accuracy=metrics.accuracy_score(y_test, predicted)
+print("The accuracy of the second model on the test data is",big_model_accuracy)
+
+c_matrix = metrics.confusion_matrix(y_test, predicted, labels=[0,1])
+# Here labels should include the elements we are inputting and their order should match the display labels below.
+cm_display = metrics.ConfusionMatrixDisplay(confusion_matrix = c_matrix, display_labels = ['Male', 'Female'])
+cm_display.plot()
+plt.show() 
+
+
+
+# What if we used fewer features originally?  
+# For instance, we know from exploration.py that weight and shucked weight are correlated.  
+# Is the redundency of certain factors giving them more weight?  Let's investigate.
+
+X_train.info()
+X_train=X_train[['Length','Height','Weight','Age']]
+X_train.info()
+X_test=X_test[['Length','Height','Weight','Age']]
+
+col4_dtree = tree.DecisionTreeClassifier()
+col4_dtree = col4_dtree.fit(X_train.values, y_train)
+
+predicted=col4_dtree.predict(X_test.values)
+col4_model_accuracy=metrics.accuracy_score(y_test, predicted)
+print("The accuracy of the second model on the test data is",col4_model_accuracy)
+
+c_matrix = metrics.confusion_matrix(y_test, predicted, labels=[0,1])
+# Here labels should include the elements we are inputting and their order should match the display labels below.
+cm_display = metrics.ConfusionMatrixDisplay(confusion_matrix = c_matrix, display_labels = ['Male', 'Female'])
+cm_display.plot()
+plt.show() 
