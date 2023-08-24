@@ -3,6 +3,10 @@ import matplotlib.pyplot as plt
 from sklearn import tree
 from sklearn.model_selection import train_test_split
 from sklearn import metrics
+import numpy as np
+
+np.random.seed(1)
+# This will make the results of the tree process consistent across different iterations of the script.
 
 # We aim to predict the gender of crabs using their other features.
 # For simplicity we will only consider crabs from our dataset which are known to be male or female.
@@ -116,7 +120,7 @@ col4_dtree = col4_dtree.fit(X_train.values, y_train)
 
 predicted=col4_dtree.predict(X_test.values)
 col4_model_accuracy=metrics.accuracy_score(y_test, predicted)
-print("The accuracy of the second model on the test data is",col4_model_accuracy)
+print("The accuracy of the third model on the test data is",col4_model_accuracy)
 
 c_matrix = metrics.confusion_matrix(y_test, predicted, labels=[0,1])
 # Here labels should include the elements we are inputting and their order should match the display labels below.
