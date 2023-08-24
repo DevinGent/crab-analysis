@@ -31,7 +31,7 @@ train_df, test_df = train_test_split(df,train_size=.8, random_state=3)
 train_df.info()
 test_df.info()
 
-# We will seperate the predictors from the value we want to have predicted ('Sex')
+# We will separate the predictors from the value we want to have predicted ('Sex')
 X_train=train_df.drop('Sex',axis=1)
 X_test=test_df.drop('Sex',axis=1)
 
