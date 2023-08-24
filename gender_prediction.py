@@ -1,9 +1,9 @@
 import pandas as pd
+import numpy as np
 import matplotlib.pyplot as plt
 from sklearn import tree
 from sklearn.model_selection import train_test_split
 from sklearn import metrics
-import numpy as np
 
 np.random.seed(1)
 # This will make the results of the tree process consistent across different iterations of the script.
