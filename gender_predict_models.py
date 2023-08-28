@@ -9,6 +9,8 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
 from sklearn.naive_bayes import GaussianNB
 from sklearn.svm import SVC
+from sklearn.ensemble import RandomForestClassifier
+from xgboost import XGBClassifier
 
 # Following our work in gender_prediction.py, we will now use various different models and compare their accuracy in predicting 
 # crab genders.  The early part of this code is a direct copy from gender_prediction.py.
@@ -149,6 +151,65 @@ plt.show()
 
 accuracy.append((predicted[i][0],metrics.accuracy_score(y_test, predicted[i][1])))
 print(accuracy[i])
+
+# Next model (Decision Tree)
+i=i+1
+dtree = tree.DecisionTreeClassifier()
+dtree.fit(X_train.values, y_train)
+predicted.append(('Decision Tree', dtree.predict(X_test.values)))
+print("The",predicted[i][0],'model predicts')
+print(predicted[i][1])
+
+
+c_matrices.append((predicted[i][0], metrics.confusion_matrix(y_test, predicted[i][1], labels=[0,1])))
+# Here labels should include the elements we are inputting and their order should match the display labels below.
+cm_display = metrics.ConfusionMatrixDisplay(confusion_matrix = c_matrices[i][1], display_labels = ['Male', 'Female'])
+cm_display.plot()
+plt.show() 
+
+accuracy.append((predicted[i][0],metrics.accuracy_score(y_test, predicted[i][1])))
+print(accuracy[i])
+
+
+# Next model (Random Forest)
+i=i+1
+forest = RandomForestClassifier()
+forest.fit(X_train.values, y_train)
+predicted.append(('Random Forest', forest.predict(X_test.values)))
+print("The",predicted[i][0],'model predicts')
+print(predicted[i][1])
+
+
+c_matrices.append((predicted[i][0], metrics.confusion_matrix(y_test, predicted[i][1], labels=[0,1])))
+# Here labels should include the elements we are inputting and their order should match the display labels below.
+cm_display = metrics.ConfusionMatrixDisplay(confusion_matrix = c_matrices[i][1], display_labels = ['Male', 'Female'])
+cm_display.plot()
+plt.show() 
+
+accuracy.append((predicted[i][0],metrics.accuracy_score(y_test, predicted[i][1])))
+print(accuracy[i])
+
+# Next model (XGBoost)
+i=i+1
+xgb = XGBClassifier()
+xgb.fit(X_train.values, y_train)
+predicted.append(('XGBoost', xgb.predict(X_test.values)))
+print("The",predicted[i][0],'model predicts')
+print(predicted[i][1])
+
+
+c_matrices.append((predicted[i][0], metrics.confusion_matrix(y_test, predicted[i][1], labels=[0,1])))
+# Here labels should include the elements we are inputting and their order should match the display labels below.
+cm_display = metrics.ConfusionMatrixDisplay(confusion_matrix = c_matrices[i][1], display_labels = ['Male', 'Female'])
+cm_display.plot()
+plt.show() 
+
+accuracy.append((predicted[i][0],metrics.accuracy_score(y_test, predicted[i][1])))
+print(accuracy[i])
+print(xgb.score(X_test.values,y_test))
+
+# How do these score compared to just blindly picking male each time?
+print("The accuracy when just picking male each time is",metrics.accuracy_score(y_test,[0]*len(y_test)))
 
 
 
